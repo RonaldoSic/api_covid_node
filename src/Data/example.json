@@ -1,0 +1,52 @@
+[
+    {
+        "id": 1,
+        "nombres" : "Ronaldo",
+        "apellidos": "Sic",
+        "edad": "23",
+        "genero": "masculino",
+        "pais": "Guatemala",
+        "departamento": "Totonicapan",
+        "municipio_ciudad": "Totonicapan"
+    },
+    {
+        "id": 2,
+        "nombres" : "Ronaldo",
+        "apellidos": "Sic",
+        "edad": "23",
+        "genero": "Masculino",
+        "pais": "Guatemala",
+        "departamento": "Totonicapan",
+        "municipio_ciudad": "Totonicapan"
+    },
+    {
+        "id": 3,
+        "nombres" : "Ronaldo",
+        "apellidos": "Sic",
+        "edad": "23",
+        "genero": "masculino",
+        "pais": "Guatemala",
+        "departamento": "Totonicapan",
+        "municipio_ciudad": "Totonicapan"
+    },
+    {
+        "id": 4,
+        "nombres" : "Ronaldo",
+        "apellidos": "Sic",
+        "edad": "23",
+        "genero": "masculino",
+        "pais": "Guatemala",
+        "departamento": "Totonicapan",
+        "municipio_ciudad": "Totonicapan"
+    },
+    {
+        "id": 5,
+        "nombres" : "Ronaldo",
+        "apellidos": "Sic",
+        "edad": "23",
+        "genero": "masculino",
+        "pais": "Guatemala",
+        "departamento": "Totonicapan",
+        "municipio_ciudad": "Totonicapan"
+    }
+]

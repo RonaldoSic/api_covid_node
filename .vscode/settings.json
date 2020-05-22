@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "connectionTimeout": 1,
+            "database": "covid19",
+            "dialect": "MariaDB",
+            "name": "Covid19ApiDB",
+            "password": "Datos18",
+            "port": 3307,
+            "server": "localhost",
+            "username": "Ronaldo"
+        }
+    ]
+}

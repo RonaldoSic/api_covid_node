@@ -4,40 +4,61 @@ const _ = require('underscore');
 const exampleData = require('../Data/example.json')
 const mysqlConexion = require('../Data/conexionDB');
 
-/*
-INSERT INTO `personas19` (`id`, `nombres`, `apellidos`, `edad`, `genero`, `pais`, `departamento`, `municipio_ciudad`) VALUES (NULL, 'Maria Regina', 'Paz Reyes', '27', 'Femenino', 'Guatemala', 'Peten', 'San Benito Peten');
-*/ 
-
+// SELECT * from personas19 WHERE departamento like '%C%'
+// SELECT * FROM personas19 where municipio_ciudad like '%to%'
+// SELECT * FROM personas19 where genero = 'Masculino'
+// Select * from personas19 where pais = 'Guatemala'}
+let consultas = [
+    `SELECT * from personas19 WHERE departamento like '%?%'`,
+    `SELECT * FROM personas19 where municipio_ciudad like '%?%'`,
+    `SELECT * FROM personas19 where genero = '?'`,
+    `Select * from personas19 where pais = '?'` 
+    ]
+// 
 router.get('/personas', (req, res) =>{
-    res.json(exampleData)
+    // res.json(exampleData)
+    mysqlConexion.query(`SELECT * FROM personas19`, (err, rows, fields) =>{
+        if(!err){
+            res.status(200).json(rows)
+        }else{
+            res.status(500).json({"Staus":"People Saved"})
+        }
+    });
 })
-
-
 router.get('/personas/:country', (req, res) =>{
+    console.log('El Body de get',req.body);
     const {country} = req.params;
     console.log(country, ' Esto es tu parametro?');    
     mysqlConexion.query(`Select * from personas19 where pais = ${country}`, (err, rows, fields) =>{
         if(!err){
             res.json(rows)
-        }else{
-            res.json({'error': err})
-        }
+        }else{ res.json({'error': err}) }
     });
 });
+// 
+router.patch('/personas', (req, res) =>{
+    res.json(req.body);
+})
+
+
 router.post ('/personas',(req, res) => {
     const {nombres, apellidos, 
             edad, genero, pais,
             departamento, municipio_ciudad} = req.body;
-    if (nombres && apellidos && edad && genero && pais && departamento && municipio_ciudad) {
-        const id = exampleData.length +1;
-        const person ={id,...req.body}
-        console.log(person);
-        exampleData.push(person);
-        res.json(exampleData)
+    const query = `
+        INSERT INTO personas19 (nombres,apellidos,edad,genero,pais,departamento,municipio_ciudad) 
+        VALUES (?,?,?,?,?,?,?)`;
+    if (nombres && apellidos && edad && genero && pais && departamento && municipio_ciudad) {        
+        mysqlConexion.query(query,[nombres, apellidos, edad, genero, pais, departamento, municipio_ciudad], (err, rows, fields) =>{
+            if(!err){
+                res.status(200).json({"Staus":"People Saved"})
+            }else{
+                res.status(500).json({'Error Insert': err})
+            }
+        });
     }else{
-        res.status(500).json({error: 'No es posible almacenra una persona ahora'});
-    }
-    
+        res.status(500).json({error: 'Los datos Enviados no concuedan, revisa que esten todos los datos'});
+    }    
 })
 router.put('/personas/:id',(req, res) =>{
     const {id} = req.params;
@@ -65,4 +86,5 @@ router.delete('/personas/:id',(req, res) =>{
     })
     res.send(exampleData)
 })
+
 module.exports = router;

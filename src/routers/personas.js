@@ -5,18 +5,7 @@ const router = Router();
 const _ = require('underscore');
 const exampleData = require('../Data/example.json')
 const mysqlConexion = require('../Data/conexionDB');
-
-// SELECT * from personas19 WHERE departamento like '%C%'
-// SELECT * FROM personas19 where municipio_ciudad like '%to%'
-// SELECT * FROM personas19 where genero = 'Masculino'
-// Select * from personas19 where pais = 'Guatemala'}
-let consultas = [
-    `SELECT * from personas19 WHERE departamento like '%?%'`,
-    `SELECT * FROM personas19 where municipio_ciudad like '%?%'`,
-    `SELECT * FROM personas19 where genero = '?'`,
-    `Select * from personas19 where pais = '?'`
-]
-// 
+// METODOS PARA LAS CONSULTAS
 router.get('/personas', (req, res) => {
     // res.json(exampleData)
     mysqlConexion.query(`SELECT * FROM personas19`, (err, rows, fields) => {
@@ -24,28 +13,11 @@ router.get('/personas', (req, res) => {
             res.status(200).json(rows)
         } else {
             res.status(500).json({
-                "Staus": "People Saved"
+                "Staus": "list People no found"
             })
         }
     });
 })
-router.get('/personas/:country', (req, res) => {
-    console.log('El Body de get', req.body);
-    const {
-        country
-    } = req.params;
-    console.log(country, ' Esto es tu parametro?');
-    mysqlConexion.query(`Select * from personas19 where pais = ${country}`, (err, rows, fields) => {
-        if (!err) {
-            res.json(rows)
-        } else {
-            res.json({
-                'error': err
-            })
-        }
-    });
-});
-// 
 router.patch('/personas', (req, res) => {
     const {
         buscarEsto,
@@ -53,43 +25,86 @@ router.patch('/personas', (req, res) => {
         edadMin,
         opcionNum
     } = req.body;
-    if (buscarEsto != '') {
+    let resultado = [];
+    
         console.log('Esto es lo que hay que buscar',buscarEsto)
         switch (opcionNum) {
             case 1:
-                mysqlConexion.query(`Select * from personas19 where pais = ${buscarEsto}`, (err, rows, fields) => {
-                    if (!err) {
-                        res.status(200).json(rows)
-                    } else {
-                        res.status(500).json({
-                            "Staus": "no se puede con la busqueda"
-                        })
-                    }
-                });
+                if(buscarEsto !=''){
+                    mysqlConexion.query(`Select * from personas19 where pais = '${buscarEsto}'`,    (err, rows, fields) => {
+                        if (!err) {
+                            console.log(rows)
+                            res.json(rows)
+                        } else {
+                            res.status(500).json({'Error':'Interno'});
+                        }
+                    });
+                }
                 break;
             case 2:
-                console.log("Buscar por Departamento")
+                console.log("Buscar por Departamento")   
+                if(buscarEsto !=''){             
+                    mysqlConexion.query(`SELECT * FROM personas19 where departamento like '%${buscarEsto}%'`, (err, rows, fields) => {
+                        if (!err) {
+                            console.log(rows)
+                            res.json(rows)
+                        } else {
+                            res.status(500).json({'Error':'Interno'});
+                        }
+                    });
+                }
                 break;
             case 3:
                 console.log("Buscar por Municipio")
+                if(buscarEsto !=''){
+                    mysqlConexion.query(`SELECT * FROM personas19 where municipio_ciudad like '%${buscarEsto}%'`, (err, rows, fields) => {
+                        if (!err) {
+                            console.log(rows)
+                            res.json(rows)
+                        } else {
+                            res.status(500).json({'Error':'Interno'});
+                        }
+                    });
+                }
                 break;
             case 4:
                 console.log("Buscar por Genero")
-                break;
+                if(buscarEsto !=''){
+                    mysqlConexion.query(`SELECT * FROM personas19 where genero like '%${buscarEsto}%'`, (err, rows, fields) => {
+                        if (!err) {
+                            console.log(rows)
+                            res.json(rows)
+                        } else {
+                            res.status(500).json({'Error':'Interno'});
+                        }
+                    });
+                }
+                break;                
             case 5:
-                console.log("Buscar por rango de edades")
+                if(edadMax != 0 && edadMin != 0){
+                    console.log("Buscar por rango de edades")                
+                    mysqlConexion.query(`select * from personas19 WHERE edad BETWEEN ${edadMin} and ${edadMax}`, (err, rows, fields) => {
+                        if (!err) {
+                            console.log(rows)
+                            res.json(rows)
+                        } else {
+                            res.status(500).json({'Error':'Interno'});
+                        }
+                    });
+                }
                 break;
             default:
+                console.log('No empata La opcion')
                 break;
         }
-    } else {
-        res.status(400).json({
-            "error": "Su perticion no es la correcta"
-        });
-    }
+        // if(resultado.length != 0 ){
+        //     res.json(resultado);
+        // }else {
+        // res.status(400).json({
+        //     "error": "Su perticion no es la correcta"
+        // });
+        // }
 })
-
-
 router.post('/personas', (req, res) => {
     const {
         nombres,
@@ -121,6 +136,8 @@ router.post('/personas', (req, res) => {
         });
     }
 })
+
+// Esto es para un archivo ya cargano no funciona para la api
 router.put('/personas/:id', (req, res) => {
     const {
         id

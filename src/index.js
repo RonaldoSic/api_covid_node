@@ -4,8 +4,6 @@ const morgan = require('morgan');
 const port = 4000;
 const apiDirect = '/api';
 // +++SETTING CROSS+++
-const host = process.env.HOST || '0.0.0.0'; //escuchando desde un host especifico
-
 // +++ SETTING +++
 app.set('port', process.env.PORT || port);
 app.set('json spaces', 2);

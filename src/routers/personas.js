@@ -7,7 +7,6 @@ const exampleData = require('../Data/example.json')
 const mysqlConexion = require('../Data/conexionDB');
 // METODOS PARA LAS CONSULTAS
 router.get('/personas', (req, res) => {
-    // res.json(exampleData)
     mysqlConexion.query(`SELECT * FROM personas19`, (err, rows, fields) => {
         if (!err) {
             res.status(200).json(rows)

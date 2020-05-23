@@ -6,7 +6,6 @@ const mysqlConexion = mysql.createConnection({
     password:'Datos1879',
     database:'umgcovid19'
 });
-
 mysqlConexion.connect((err)=>{
     err?console.log(err):console.log('Data Base is connected')    
 });

@@ -24,6 +24,7 @@ app.use(express.json()); // esto para que retore formatos json
 // +++ ROUTERS +++
 app.use(require('./routers/index'));
 app.use(apiDirect,require('./routers/personas'));
+app.use(apiDirect,require('./routers/donantes'));
 // Rura para consumit otra REST API
 app.use(apiDirect,require('./routers/userByOtherApi'));
 
